@@ -1,7 +1,7 @@
 import tensorflow as tf 
 
 
-
+print(tf.__version__)
 
 x=tf.random.normal([1,3])
 

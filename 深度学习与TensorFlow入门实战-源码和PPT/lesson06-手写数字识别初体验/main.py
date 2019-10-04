@@ -1,28 +1,32 @@
-import  os
-import  tensorflow as tf
-from    tensorflow import keras
-from    tensorflow.keras import layers, optimizers, datasets
+# coding=gbk
+import os
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers, optimizers, datasets
 
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
-
-(x, y), (x_val, y_val) = datasets.mnist.load_data() 
-x = tf.convert_to_tensor(x, dtype=tf.float32) / 255.
+# 下载数据集
+(x, y), (x_val, y_val) = datasets.mnist.load_data()
+# x：【60K，28，28】 y：【60K】
+x = tf.convert_to_tensor(x, dtype=tf.float32) / 255.#转换为tensor的格式
 y = tf.convert_to_tensor(y, dtype=tf.int32)
 y = tf.one_hot(y, depth=10)
 print(x.shape, y.shape)
 train_dataset = tf.data.Dataset.from_tensor_slices((x, y))
-train_dataset = train_dataset.batch(200)
+train_dataset = train_dataset.batch(200)#一次返回200张图片一起计算
 
- 
+# for step,(x,y) in enumerate(train_dataset):
+#     print(step,x.shape,y,y.shape)
 
 
-model = keras.Sequential([ 
-    layers.Dense(512, activation='relu'),
+
+model = keras.Sequential([
+    layers.Dense(512, activation='relu'),#512指的是输出512
     layers.Dense(256, activation='relu'),
     layers.Dense(10)])
 
-optimizer = optimizers.SGD(learning_rate=0.001)
+optimizer = optimizers.SGD(learning_rate=0.001)#随机梯度下降
 
 
 def train_epoch(epoch):
