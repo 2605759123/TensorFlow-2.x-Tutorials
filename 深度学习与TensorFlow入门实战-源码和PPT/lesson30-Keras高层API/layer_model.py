@@ -86,15 +86,15 @@ network.compile(optimizer=optimizers.Adam(lr=0.01),
 	)
 
 network.fit(db, epochs=5, validation_data=ds_val,
-              validation_freq=2)
- 
+			validation_freq=2)
+ #network.evaluate代表在训练结束后再在test模型中求正确率，没有上面指定validation_data=ds_val,validation_freq=2灵活
 network.evaluate(ds_val)
 
 sample = next(iter(ds_val))
 x = sample[0]
 y = sample[1] # one-hot
 pred = network.predict(x) # [b, 10]
-# convert back to number 
+# convert back to number
 y = tf.argmax(y, axis=1)
 pred = tf.argmax(pred, axis=1)
 

@@ -5,7 +5,7 @@ from    matplotlib import pyplot as plt
 import  io
 
 def preprocess(x, y):
-
+    #预处理
     x = tf.cast(x, dtype=tf.float32) / 255.
     y = tf.cast(y, dtype=tf.int32)
 
@@ -54,6 +54,7 @@ db = tf.data.Dataset.from_tensor_slices((x,y))
 db = db.map(preprocess).shuffle(60000).batch(batchsz).repeat(10)
 
 ds_val = tf.data.Dataset.from_tensor_slices((x_val, y_val))
+#参数drop_remainder：表示在少于batch_size元素的情况下是否应删除最后一批 ; 默认是不删除。
 ds_val = ds_val.map(preprocess).batch(batchsz, drop_remainder=True) 
 
 
@@ -73,7 +74,7 @@ optimizer = optimizers.Adam(lr=0.01)
 
 current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 log_dir = 'logs/' + current_time
-summary_writer = tf.summary.create_file_writer(log_dir) 
+summary_writer = tf.summary.create_file_writer(log_dir)
 
 # get x from (x,y)
 sample_img = next(iter(db))[0]
@@ -82,6 +83,7 @@ sample_img = sample_img[0]
 sample_img = tf.reshape(sample_img, [1, 28, 28, 1])
 with summary_writer.as_default():
     tf.summary.image("Training sample:", sample_img, step=0)
+
 
 for step, (x,y) in enumerate(db):
 
@@ -128,9 +130,11 @@ for step, (x,y) in enumerate(db):
         print(step, 'Evaluate Acc:', total_correct/total)
 
         
-        # print(x.shape) 
+        print(x.shape)
         val_images = x[:25]
+        print(val_images.shape)
         val_images = tf.reshape(val_images, [-1, 28, 28, 1])
+        print(val_images.shape)
         with summary_writer.as_default():
             tf.summary.scalar('test-acc', float(total_correct/total), step=step)
             tf.summary.image("val-onebyone-images:", val_images, max_outputs=25, step=step)

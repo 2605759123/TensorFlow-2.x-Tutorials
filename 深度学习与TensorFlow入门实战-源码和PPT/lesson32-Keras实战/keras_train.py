@@ -37,7 +37,7 @@ class MyDense(layers.Layer):
     # to replace standard layers.Dense()
     def __init__(self, inp_dim, outp_dim):
         super(MyDense, self).__init__()
-
+        #add_variable和add_weight好像是一样的？
         self.kernel = self.add_variable('w', [inp_dim, outp_dim])
         # self.bias = self.add_variable('b', [outp_dim])
 
